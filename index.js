@@ -9,7 +9,7 @@ var SCRIPT_SRC = 'https://rawgit.com/paulirish/memory-stats.js/master/memory-sta
 function gulpMemoryStats(opts) {
   opts = opts || {};
 
-  var statScript = '<script>(function(){ var s = new MemoryStats(); stats.domElement.style.position="fixed";';
+  var statScript = '<script>(function(){ var stats = new MemoryStats(); stats.domElement.style.position="fixed";';
 
   switch (opts.position) {
     case 'top-right':
