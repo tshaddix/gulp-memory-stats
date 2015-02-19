@@ -4,7 +4,7 @@
   "description": "Gulp plugin for enabling memory stats using https://github.com/paulirish/memory-stats.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
