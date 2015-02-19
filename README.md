@@ -1,8 +1,15 @@
 # gulp-memory-stats
-Gulp plugin for enabling memory stats using @paulirish's project.
 
+Gulp plugin for enabling memory stats using [@paulirish's](https://github.com/paulirish) [memory-stats.js](https://github.com/paulirish/memory-stats.js). Appends `memory-stats.js` to document `head` and appends rendering/setup script to`body`.
 
-## Example
+```
+npm install --save-dev gulp-memory-stats
+```
+
+Take a look at the [Usage](https://github.com/paulirish/memory-stats.js#usage) section for Chrome setup.
+
+## Quick Example
+
 ```js
 
 // in your gulpfile...
@@ -15,4 +22,10 @@ gulp.task('html', function() {
     .pipe(gulp.dest(dest.html));
 });
 
+```
+
+## Testing
+
+```
+mocha
 ```
