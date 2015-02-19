@@ -3,11 +3,30 @@ var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 
 // Consts
-var PLUGIN_NAME = 'gulp-prefixer';
-var BOOKMARLET_SCRIPT = '<script>(function(){var script=document.createElement("script");script.src="https://rawgit.com/paulirish/memory-stats.js/master/bookmarklet.js";document.head.appendChild(script);})()</script>';
+var PLUGIN_NAME = 'gulp-memory-stats';
+var SCRIPT_SRC = 'https://rawgit.com/paulirish/memory-stats.js/master/memory-stats.js';
 
-function gulpMemoryStats() {
-  prefixText = new Buffer(BOOKMARLET_SCRIPT);
+function gulpMemoryStats(opts) {
+  opts = opts || {};
+
+  var statScript = '<script>(function(){ var s = new MemoryStats(); stats.domElement.style.position="fixed";';
+
+  switch (opts.position) {
+    case 'top-right':
+      statScript += ' stats.domElement.style.top=0; stats.domElement.style.right=0;';
+      break;
+    case 'top-left':
+      statScript += ' stats.domElement.style.top=0; stats.domElement.style.left=0;';
+      break;
+    case 'bottom-left':
+      statScript += ' stats.domElement.style.bottom=0; stats.domElement.style.left=0;';
+      break;
+    default:
+      statScript += ' stats.domElement.style.bottom=0; stats.domElement.style.right=0;';
+      break;
+  }
+
+  statScript += 'document.body.appendChild( stats.domElement ); requestAnimationFrame(function rAFloop(){ stats.update(); requestAnimationFrame(rAFloop); });})();</script>';
 
   // creating a stream through which each file will pass
   var stream = through.obj(function(file, enc, cb) {
@@ -19,7 +38,9 @@ function gulpMemoryStats() {
     if (file.isBuffer()) {
       var fileString = file.contents.toString('utf8');
 
-      fileString = fileString.replace('</body>', BOOKMARLET_SCRIPT + '\n' + '</body>');
+      fileString = fileString
+        .replace('</head>', '<script src="' + SCRIPT_SRC + '"></script>\n</head>')
+        .replace('</body>', statScript + '\n</body>');
 
       file.contents = new Buffer(fileString, 'utf8');
     }
@@ -35,7 +56,7 @@ function gulpMemoryStats() {
   return stream;
 }
 
-gulpMemoryStats.bookmarkletScript = BOOKMARLET_SCRIPT;
+gulpMemoryStats.srcScript = SCRIPT_SRC;
 
 // Exporting the plugin main function
 module.exports = gulpMemoryStats;
